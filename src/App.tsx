@@ -13,6 +13,9 @@ import {
   Gamepad2,
 } from "lucide-react";
 import GameCheff from "./GameCheff";
+import MascotIcon from "@/assets/icons/mascot.svg";
+import SearchIcon from "@/assets/icons/search.svg";
+import AlertIcon from "@/assets/icons/alert.svg";
 
 // Utilidades simples
 const cls = (...s: string[]) => s.filter(Boolean).join(" ");
@@ -148,7 +151,7 @@ function Checklists() {
         {Object.keys(CHECKLISTS).map((name) => (
           <Card key={name} onClick={() => setCurrent(name as ChecklistKey)}>
             <div className="flex items-start gap-3">
-              <ListChecks className="text-green-600" />
+              <img src={AlertIcon} alt="" className="w-5 h-5" />
               <div className="flex-1">
                 <div className="flex items-center justify-between">
                   <h3 className="font-semibold">{name}</h3>
@@ -276,8 +279,9 @@ function Rotulometro() {
   if (step === "idle")
     return (
       <div className="text-center">
-        <p className="text-gray-600 mb-3">
-          Aprenda a identificar ingredientes de risco.
+        <p className="text-gray-600 mb-3 flex items-center justify-center gap-1">
+          <img src={SearchIcon} alt="Pesquisar" className="w-4 h-4" />
+          <span>Aprenda a identificar ingredientes de risco.</span>
         </p>
         <Btn onClick={start}>
           <Play className="inline mr-2" /> Começar
@@ -599,8 +603,8 @@ export default function App() {
     <div className="min-h-[100vh] bg-gradient-to-b from-slate-50 to-white">
       <div className="max-w-4xl mx-auto p-4 md:p-6">
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 rounded-xl bg-blue-600 text-white">
-            <GraduationCap />
+          <div className="p-2 rounded-xl bg-blue-600">
+            <img src={MascotIcon} alt="Mascote" className="w-6 h-6" />
           </div>
           <div>
             <h1 className="text-2xl md:text-3xl font-bold">CheckGluten</h1>
@@ -728,3 +732,5 @@ export default function App() {
     </div>
   );
 }
+
+export { Checklists, Rotulometro };
