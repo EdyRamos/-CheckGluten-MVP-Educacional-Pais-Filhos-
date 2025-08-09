@@ -359,12 +359,19 @@ function Recipes() {
 // --- PERFIL FAMILIAR -----------------------------------------------------
 function Family() {
   const [kids, setKids] = useState<{ name: string; age: number }[]>([{ name: "Ana", age: 8 }]);
-  const add = () => {
-    const name = prompt("Nome da criança?")?.trim();
-    const age = Number(prompt("Idade?"));
-    if (!name || isNaN(age)) return;
+  const [newName, setNewName] = useState("");
+  const [newAge, setNewAge] = useState("");
+  const [showForm, setShowForm] = useState(false);
+
+  const save = () => {
+    const name = newName.trim();
+    const age = Number(newAge);
+    if (!name || !newAge || isNaN(age) || age <= 0) return;
     const next = [...kids, { name, age }];
     setKids(next);
+    setNewName("");
+    setNewAge("");
+    setShowForm(false);
     console.log("family_profile_created", { idade_faixa: age < 6 ? "0-5" : age < 12 ? "6-11" : "12+" });
   };
   return (
@@ -384,7 +391,31 @@ function Family() {
           </div>
         ))}
       </div>
-      <div className="mt-4"><Btn variant="outline" onClick={add}>Adicionar perfil</Btn></div>
+      {showForm ? (
+        <div className="mt-4 p-4 border rounded-xl space-y-2">
+          <input
+            className="w-full p-2 border rounded"
+            placeholder="Nome"
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
+          />
+          <input
+            className="w-full p-2 border rounded"
+            placeholder="Idade"
+            type="number"
+            value={newAge}
+            onChange={(e) => setNewAge(e.target.value)}
+          />
+          <div className="flex gap-2">
+            <Btn onClick={save} disabled={!newName.trim() || !newAge}>Salvar</Btn>
+            <Btn variant="ghost" onClick={() => { setShowForm(false); setNewName(""); setNewAge(""); }}>Cancelar</Btn>
+          </div>
+        </div>
+      ) : (
+        <div className="mt-4">
+          <Btn variant="outline" onClick={() => setShowForm(true)}>Adicionar perfil</Btn>
+        </div>
+      )}
     </div>
   );
 }
