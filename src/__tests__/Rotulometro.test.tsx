@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import { Rotulometro } from '../App';
+import { Rotulometro } from '../components/Rotulometro';
 
 describe('Rotulometro', () => {
   it('shows start button', () => {

@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import { Checklists } from '../App';
+import { Checklists } from '../components/Checklists';
 
 describe('Checklists', () => {
   it('renders checklist options', () => {
