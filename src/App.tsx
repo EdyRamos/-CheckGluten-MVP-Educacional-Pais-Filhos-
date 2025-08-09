@@ -575,4 +575,3 @@ export default function App() {
   );
 }
 
-export { Checklists, Rotulometro, Recipes, Family };
