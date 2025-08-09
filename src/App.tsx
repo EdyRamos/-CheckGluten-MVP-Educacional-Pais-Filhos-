@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
 import {
   ChefHat,
   GraduationCap,
@@ -13,70 +12,12 @@ import {
   Gamepad2,
 } from "lucide-react";
 import GameCheff from "./GameCheff";
+import Btn from "./components/Btn";
+import Card from "./components/Card";
+import Alert from "./components/Alert";
 
 // Utilidades simples
 const cls = (...s: string[]) => s.filter(Boolean).join(" ");
-
-// Botão básico
-function Btn({
-  children,
-  onClick,
-  variant = "primary",
-  disabled = false,
-}: {
-  children: React.ReactNode;
-  onClick?: () => void;
-  variant?: "primary" | "ghost" | "outline";
-  disabled?: boolean;
-}) {
-  const base = "px-4 py-2 rounded-2xl font-medium transition border select-none";
-  const styles = {
-    primary:
-      "bg-blue-600 text-white hover:bg-blue-700 border-blue-600 disabled:opacity-50",
-    ghost:
-      "bg-transparent hover:bg-gray-100 border-transparent text-gray-800",
-    outline: "bg-white border-gray-300 hover:bg-gray-50",
-  } as const;
-  return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className={cls(base, styles[variant])}
-    >
-      {children}
-    </button>
-  );
-}
-
-// Cartão
-function Card({
-  children,
-  onClick,
-}: {
-  children: React.ReactNode;
-  onClick?: () => void;
-}) {
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (!onClick) return;
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      onClick();
-    }
-  };
-
-  return (
-    <motion.div
-      whileHover={{ y: -2 }}
-      className="p-5 rounded-2xl border bg-white shadow-sm hover:shadow-md cursor-pointer focus:outline-none"
-      onClick={onClick}
-      role="button"
-      tabIndex={0}
-      onKeyDown={handleKeyDown}
-    >
-      {children}
-    </motion.div>
-  );
-}
 
 // Header
 function Header({ title, onBack }: { title: string; onBack?: () => void }) {
@@ -291,18 +232,16 @@ function Rotulometro() {
     return (
       <div className="space-y-4">
         <Header title="Resultado" />
-        <div className="p-5 border rounded-2xl">
+        <Card>
           <div className="text-2xl font-bold">{score}%</div>
-          <div className="text-gray-600">
-            Acertos: {acertos} / {total}
-          </div>
+          <div className="text-gray-600">Acertos: {acertos} / {total}</div>
           {erros.length > 0 && (
-            <div className="mt-2 text-sm text-red-600">
+            <Alert variant="danger" className="mt-2">
               Termos para revisar: {Array.from(new Set(erros)).join(", ")}
-            </div>
+            </Alert>
           )}
-        </div>
-        <Btn variant="outline" onClick={() => setStep("idle")}>
+        </Card>
+        <Btn variant="secondary" onClick={() => setStep("idle")}>
           Jogar novamente
         </Btn>
       </div>
@@ -332,7 +271,7 @@ function Rotulometro() {
         ))}
       </div>
       <div className="mt-4 flex items-center gap-2">
-        <Btn variant="outline" onClick={submit}>
+        <Btn variant="secondary" onClick={submit}>
           Confirmar escolha
         </Btn>
         <div className="text-sm text-gray-600 flex items-center gap-1">
@@ -340,13 +279,13 @@ function Rotulometro() {
           Dica: procure trigo, centeio, cevada, malte, triticale…
         </div>
       </div>
-      <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-xl text-sm">
+      <Card className="mt-4 bg-blue-50 border-blue-200 text-sm">
         {Object.entries(cur.explicacoes).map(([k, v]) => (
           <div key={k}>
             <strong>{k}:</strong> {v}
           </div>
         ))}
-      </div>
+      </Card>
     </div>
   );
 }
@@ -456,31 +395,31 @@ function Recipes() {
     <div>
       <Header title={sel.title} onBack={() => setSel(null)} />
       <div className="grid md:grid-cols-2 gap-4">
-        <div className="p-4 border rounded-2xl">
+        <Card>
           <h4 className="font-semibold mb-2">Ingredientes</h4>
           <ul className="list-disc ml-5 space-y-1 text-sm">
             {sel.ingredients.map((i, idx) => (
               <li key={idx}>{i}</li>
             ))}
           </ul>
-        </div>
-        <div className="p-4 border rounded-2xl">
+        </Card>
+        <Card>
           <h4 className="font-semibold mb-2">Passo a passo</h4>
           <ol className="list-decimal ml-5 space-y-1 text-sm">
             {sel.steps.map((i, idx) => (
               <li key={idx}>{i}</li>
             ))}
           </ol>
-        </div>
+        </Card>
       </div>
-      <div className="mt-4 p-4 border rounded-2xl bg-amber-50">
+      <Card className="mt-4 bg-amber-50">
         <h4 className="font-semibold mb-2">Substituições</h4>
         <ul className="list-disc ml-5 space-y-1 text-sm">
           {sel.swaps.map((i, idx) => (
             <li key={idx}>{i}</li>
           ))}
         </ul>
-      </div>
+      </Card>
       <div className="mt-4">
         <Btn
           onClick={() => {
@@ -526,10 +465,7 @@ function Family() {
       <Header title="Perfis da Família" />
       <div className="space-y-2">
         {kids.map((k, i) => (
-          <div
-            key={i}
-            className="p-3 border rounded-xl flex items-center justify-between"
-          >
+          <Card key={i} className="p-3 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Users className="text-purple-600" />
               <div>
@@ -538,11 +474,11 @@ function Family() {
               </div>
             </div>
             <Star className="text-yellow-500" />
-          </div>
+          </Card>
         ))}
       </div>
       {showForm ? (
-        <div className="mt-4 p-4 border rounded-xl space-y-2">
+        <Card className="mt-4 space-y-2">
           <input
             className="w-full p-2 border rounded"
             placeholder="Nome"
@@ -561,7 +497,7 @@ function Family() {
               Salvar
             </Btn>
             <Btn
-              variant="ghost"
+              variant="secondary"
               onClick={() => {
                 setShowForm(false);
                 setNewName("");
@@ -571,10 +507,10 @@ function Family() {
               Cancelar
             </Btn>
           </div>
-        </div>
+        </Card>
       ) : (
         <div className="mt-4">
-          <Btn variant="outline" onClick={() => setShowForm(true)}>
+          <Btn variant="secondary" onClick={() => setShowForm(true)}>
             Adicionar perfil
           </Btn>
         </div>
@@ -670,44 +606,44 @@ export default function App() {
 
         <div className="mt-8 flex flex-wrap gap-2">
           <Btn
-            variant={tab === "Home" ? "primary" : "outline"}
+            variant={tab === "Home" ? "primary" : "secondary"}
             onClick={() => setTab("Home")}
           >
             Home
           </Btn>
           <Btn
-            variant={tab === "Checklists" ? "primary" : "outline"}
+            variant={tab === "Checklists" ? "primary" : "secondary"}
             onClick={() => setTab("Checklists")}
           >
             Checklists
           </Btn>
           <Btn
-            variant={tab === "Rotulometro" ? "primary" : "outline"}
+            variant={tab === "Rotulometro" ? "primary" : "secondary"}
             onClick={() => setTab("Rotulometro")}
           >
             Rotulômetro
           </Btn>
           <Btn
-            variant={tab === "Receitas" ? "primary" : "outline"}
+            variant={tab === "Receitas" ? "primary" : "secondary"}
             onClick={() => setTab("Receitas")}
           >
             Receitas
           </Btn>
           <Btn
-            variant={tab === "Familia" ? "primary" : "outline"}
+            variant={tab === "Familia" ? "primary" : "secondary"}
             onClick={() => setTab("Familia")}
           >
             Família
           </Btn>
           <Btn
-            variant={tab === "Jogo" ? "primary" : "outline"}
+            variant={tab === "Jogo" ? "primary" : "secondary"}
             onClick={() => setTab("Jogo")}
           >
             Jogo
           </Btn>
         </div>
 
-        <div className="mt-6 p-4 border rounded-2xl bg-gray-50 text-xs text-gray-600">
+        <Card className="mt-6 bg-gray-50 text-xs text-gray-600">
           <div className="font-semibold mb-1">Notas para Demo</div>
           <ul className="list-disc ml-5 space-y-1">
             <li>
@@ -723,8 +659,10 @@ export default function App() {
               (compliance/LGPD).
             </li>
           </ul>
-        </div>
+        </Card>
       </div>
     </div>
   );
 }
+
+export { Checklists, Rotulometro };
