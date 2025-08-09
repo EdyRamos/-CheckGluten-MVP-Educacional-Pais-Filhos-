@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import AppLayout from "./components/AppLayout";
 import {
   ChefHat,
   GraduationCap,
@@ -13,7 +14,11 @@ import {
   Gamepad2,
 } from "lucide-react";
 import GameCheff from "./GameCheff";
-import { Mascot, AlertIcon } from "./assets/icons";
+
+// Ícones (ajuste o alias "@" se necessário)
+import MascotIcon from "@/assets/icons/mascot.svg";
+import SearchIcon from "@/assets/icons/search.svg";
+import AlertIcon from "@/assets/icons/alert.svg";
 
 // Utilidades simples
 const cls = (...s: string[]) => s.filter(Boolean).join(" ");
@@ -34,8 +39,7 @@ function Btn({
   const styles = {
     primary:
       "bg-blue-600 text-white hover:bg-blue-700 border-blue-600 disabled:opacity-50",
-    ghost:
-      "bg-transparent hover:bg-gray-100 border-transparent text-gray-800",
+    ghost: "bg-transparent hover:bg-gray-100 border-transparent text-gray-800",
     outline: "bg-white border-gray-300 hover:bg-gray-50",
   } as const;
   return (
@@ -125,7 +129,7 @@ const CHECKLISTS: Record<string, string[]> = {
 
 type ChecklistKey = keyof typeof CHECKLISTS;
 
-function Checklists() {
+export function Checklists() {
   const [current, setCurrent] = useState<ChecklistKey | null>(null);
   const [done, setDone] = useState<Record<string, boolean[]>>(
     () =>
@@ -141,32 +145,29 @@ function Checklists() {
     const arr = done[key] || [];
     const pct = Math.round((arr.filter(Boolean).length / arr.length) * 100);
     return isNaN(pct) ? 0 : pct;
-    };
+  };
 
   if (!current) {
     return (
-      <div>
-        <Mascot className="w-16 h-16 mx-auto mb-4" />
-        <div className="grid md:grid-cols-3 gap-4">
-          {Object.keys(CHECKLISTS).map((name) => (
-            <Card key={name} onClick={() => setCurrent(name as ChecklistKey)}>
-              <div className="flex items-start gap-3">
-                <ListChecks className="text-green-600" />
-                <div className="flex-1">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-semibold">{name}</h3>
-                    <span className="text-xs text-gray-500">
-                      {progress(name)}% feito
-                    </span>
-                  </div>
-                  <p className="text-sm text-gray-600 mt-1">
-                    Checklist rápido, 2–3 min.
-                  </p>
+      <div className="grid md:grid-cols-3 gap-4">
+        {Object.keys(CHECKLISTS).map((name) => (
+          <Card key={name} onClick={() => setCurrent(name as ChecklistKey)}>
+            <div className="flex items-start gap-3">
+              <img src={AlertIcon} alt="" className="w-5 h-5" />
+              <div className="flex-1">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-semibold">{name}</h3>
+                  <span className="text-xs text-gray-500">
+                    {progress(name)}% feito
+                  </span>
                 </div>
+                <p className="text-sm text-gray-600 mt-1">
+                  Checklist rápido, 2–3 min.
+                </p>
               </div>
-            </Card>
-          ))}
-        </div>
+            </div>
+          </Card>
+        ))}
       </div>
     );
   }
@@ -182,7 +183,6 @@ function Checklists() {
 
   return (
     <div>
-      <Mascot className="w-16 h-16 mx-auto mb-4" />
       <Header title={current} onBack={() => setCurrent(null)} />
       <div className="space-y-2">
         {items.map((t, i) => (
@@ -231,7 +231,7 @@ const ROUNDS: Round[] = [
   },
 ];
 
-function Rotulometro() {
+export function Rotulometro() {
   const [step, setStep] = useState<"idle" | "playing" | "result">("idle");
   const [round, setRound] = useState(0);
   const [picked, setPicked] = useState<number[]>([]);
@@ -281,9 +281,9 @@ function Rotulometro() {
   if (step === "idle")
     return (
       <div className="text-center">
-        <Mascot className="w-16 h-16 mx-auto mb-4" />
-        <p className="text-gray-600 mb-3">
-          Aprenda a identificar ingredientes de risco.
+        <p className="text-gray-600 mb-3 flex items-center justify-center gap-1">
+          <img src={SearchIcon} alt="Pesquisar" className="w-4 h-4" />
+          <span>Aprenda a identificar ingredientes de risco.</span>
         </p>
         <Btn onClick={start}>
           <Play className="inline mr-2" /> Começar
@@ -296,7 +296,6 @@ function Rotulometro() {
     const score = Math.round((acertos / total) * 100);
     return (
       <div className="space-y-4">
-        <Mascot className="w-16 h-16 mx-auto" />
         <Header title="Resultado" />
         <div className="p-5 border rounded-2xl">
           <div className="text-2xl font-bold">{score}%</div>
@@ -318,7 +317,6 @@ function Rotulometro() {
 
   return (
     <div>
-      <Mascot className="w-16 h-16 mx-auto mb-4" />
       <Header title={`Fase ${round + 1} de ${ROUNDS.length}`} />
       <p className="text-sm text-gray-700 mb-2">
         Toque nos ingredientes que indicam risco de glúten.
@@ -441,7 +439,6 @@ const RECIPES: Recipe[] = [
 
 function Recipes() {
   const [sel, setSel] = useState<Recipe | null>(null);
-  const [saved, setSaved] = useState(false);
   if (!sel) {
     return (
       <div className="grid md:grid-cols-3 gap-4">
@@ -498,25 +495,12 @@ function Recipes() {
               alergênicos: ["glúten"],
               tempo_preparo: sel.time,
             });
-            setSaved(true);
+            alert("Receita salva! (simulação)");
           }}
         >
           Salvar & gerar lista (simulação)
         </Btn>
       </div>
-      {saved && (
-        <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-xl flex items-center gap-2">
-          <Mascot className="w-8 h-8" />
-          <AlertIcon className="w-5 h-5 text-green-700" />
-          <div>Receita salva! (simulação)</div>
-          <button
-            onClick={() => setSaved(false)}
-            className="ml-auto text-sm underline"
-          >
-            OK
-          </button>
-        </div>
-      )}
     </div>
   );
 }
@@ -618,11 +602,11 @@ export default function App() {
   const [tab, setTab] = useState<Tab>("Home");
 
   return (
-    <div className="min-h-[100vh] bg-gradient-to-b from-slate-50 to-white">
+    <AppLayout>
       <div className="max-w-4xl mx-auto p-4 md:p-6">
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 rounded-xl bg-blue-600 text-white">
-            <GraduationCap />
+          <div className="p-2 rounded-xl bg-blue-600">
+            <img src={MascotIcon} alt="Mascote" className="w-6 h-6" />
           </div>
           <div>
             <h1 className="text-2xl md:text-3xl font-bold">CheckGluten</h1>
@@ -747,7 +731,7 @@ export default function App() {
           </ul>
         </div>
       </div>
-    </div>
+    </AppLayout>
   );
 }
 
