@@ -74,8 +74,10 @@ const CHECKLISTS: Record<string, string[]> = {
   ],
 };
 
+type ChecklistKey = keyof typeof CHECKLISTS;
+
 function Checklists() {
-  const [current, setCurrent] = useState<keyof typeof CHECKLISTS | null>(null);
+  const [current, setCurrent] = useState<ChecklistKey | null>(null);
   const [done, setDone] = useState<Record<string, boolean[]>>(() => Object.fromEntries(Object.keys(CHECKLISTS).map(k => [k, Array(CHECKLISTS[k].length).fill(false)])) as Record<string, boolean[]>);
 
   const progress = (key: string) => {
@@ -88,7 +90,7 @@ function Checklists() {
     return (
       <div className="grid md:grid-cols-3 gap-4">
         {Object.keys(CHECKLISTS).map((name) => (
-          <Card key={name} onClick={() => setCurrent(name as any)}>
+          <Card key={name} onClick={() => setCurrent(name as ChecklistKey)}>
             <div className="flex items-start gap-3">
               <ListChecks className="text-green-600" />
               <div className="flex-1">
