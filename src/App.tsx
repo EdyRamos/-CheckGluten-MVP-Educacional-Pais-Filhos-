@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ChefHat,
   GraduationCap,
@@ -29,7 +29,7 @@ function Btn({
   variant?: "primary" | "ghost" | "outline";
   disabled?: boolean;
 }) {
-  const base = "px-4 py-2 rounded-2xl font-medium transition border select-none";
+  const base = "px-4 py-2 rounded-2xl font-medium transition-colors border select-none";
   const styles = {
     primary:
       "bg-blue-600 text-white hover:bg-blue-700 border-blue-600 disabled:opacity-50",
@@ -38,13 +38,18 @@ function Btn({
     outline: "bg-white border-gray-300 hover:bg-gray-50",
   } as const;
   return (
-    <button
+    <motion.button
       onClick={onClick}
       disabled={disabled}
       className={cls(base, styles[variant])}
+      whileHover={!disabled ? { scale: 1.02 } : undefined}
+      whileTap={!disabled ? { scale: 0.97 } : undefined}
+      initial={{ opacity: 0, y: 4 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.2, ease: "easeOut" }}
     >
       {children}
-    </button>
+    </motion.button>
   );
 }
 
@@ -66,12 +71,15 @@ function Card({
 
   return (
     <motion.div
-      whileHover={{ y: -2 }}
+      whileHover={{ y: -2, scale: 1.02 }}
       className="p-5 rounded-2xl border bg-white shadow-sm hover:shadow-md cursor-pointer focus:outline-none"
       onClick={onClick}
       role="button"
       tabIndex={0}
       onKeyDown={handleKeyDown}
+      initial={{ opacity: 0, y: 4 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.2, ease: "easeOut" }}
     >
       {children}
     </motion.div>
@@ -124,7 +132,7 @@ const CHECKLISTS: Record<string, string[]> = {
 
 type ChecklistKey = keyof typeof CHECKLISTS;
 
-function Checklists() {
+export function Checklists() {
   const [current, setCurrent] = useState<ChecklistKey | null>(null);
   const [done, setDone] = useState<Record<string, boolean[]>>(
     () =>
@@ -226,7 +234,7 @@ const ROUNDS: Round[] = [
   },
 ];
 
-function Rotulometro() {
+export function Rotulometro() {
   const [step, setStep] = useState<"idle" | "playing" | "result">("idle");
   const [round, setRound] = useState(0);
   const [picked, setPicked] = useState<number[]>([]);
@@ -594,6 +602,12 @@ type Tab =
 
 export default function App() {
   const [tab, setTab] = useState<Tab>("Home");
+  const pageMotion = {
+    initial: { opacity: 0, y: 8 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -8 },
+    transition: { duration: 0.2, ease: "easeOut" },
+  };
 
   return (
     <div className="min-h-[100vh] bg-gradient-to-b from-slate-50 to-white">
@@ -610,63 +624,91 @@ export default function App() {
           </div>
         </div>
 
-        {tab === "Home" && (
-          <div className="grid md:grid-cols-3 gap-4">
-            <Card onClick={() => setTab("Checklists")}>
-              <div className="flex items-start gap-3">
-                <ListChecks className="text-green-600" />
-                <div>
-                  <div className="font-semibold">Checklists Rápidos</div>
-                  <div className="text-sm text-gray-600">
-                    Cozinha, Festa e Escola — 2–3 min cada
+        <AnimatePresence mode="wait">
+          {tab === "Home" && (
+            <motion.div key="Home" {...pageMotion}>
+              <div className="grid md:grid-cols-3 gap-4">
+                <Card onClick={() => setTab("Checklists")}>
+                  <div className="flex items-start gap-3">
+                    <ListChecks className="text-green-600" />
+                    <div>
+                      <div className="font-semibold">Checklists Rápidos</div>
+                      <div className="text-sm text-gray-600">
+                        Cozinha, Festa e Escola — 2–3 min cada
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </Card>
+                </Card>
 
-            <Card onClick={() => setTab("Rotulometro")}>
-              <div className="flex items-start gap-3">
-                <GraduationCap className="text-indigo-600" />
-                <div>
-                  <div className="font-semibold">Minigame Rotulômetro</div>
-                  <div className="text-sm text-gray-600">
-                    Aprenda a detectar termos de risco
+                <Card onClick={() => setTab("Rotulometro")}>
+                  <div className="flex items-start gap-3">
+                    <GraduationCap className="text-indigo-600" />
+                    <div>
+                      <div className="font-semibold">Minigame Rotulômetro</div>
+                      <div className="text-sm text-gray-600">
+                        Aprenda a detectar termos de risco
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </Card>
+                </Card>
 
-            <Card onClick={() => setTab("Receitas")}>
-              <div className="flex items-start gap-3">
-                <ChefHat className="text-orange-600" />
-                <div>
-                  <div className="font-semibold">Receitas-Base</div>
-                  <div className="text-sm text-gray-600">
-                    Substituições seguras e práticas
+                <Card onClick={() => setTab("Receitas")}>
+                  <div className="flex items-start gap-3">
+                    <ChefHat className="text-orange-600" />
+                    <div>
+                      <div className="font-semibold">Receitas-Base</div>
+                      <div className="text-sm text-gray-600">
+                        Substituições seguras e práticas
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </Card>
+                </Card>
 
-            <Card onClick={() => setTab("Jogo")}>
-              <div className="flex items-start gap-3">
-                <Gamepad2 className="text-pink-600" />
-                <div>
-                  <div className="font-semibold">Jogo — CheckGluten</div>
-                  <div className="text-sm text-gray-600">
-                    Aventura educativa (Phaser)
+                <Card onClick={() => setTab("Jogo")}>
+                  <div className="flex items-start gap-3">
+                    <Gamepad2 className="text-pink-600" />
+                    <div>
+                      <div className="font-semibold">Jogo — CheckGluten</div>
+                      <div className="text-sm text-gray-600">
+                        Aventura educativa (Phaser)
+                      </div>
+                    </div>
                   </div>
-                </div>
+                </Card>
               </div>
-            </Card>
-          </div>
-        )}
+            </motion.div>
+          )}
 
-        {tab === "Checklists" && <Checklists />}
-        {tab === "Rotulometro" && <Rotulometro />}
-        {tab === "Receitas" && <Recipes />}
-        {tab === "Familia" && <Family />}
-        {tab === "Jogo" && <GameCheff />}
+          {tab === "Checklists" && (
+            <motion.div key="Checklists" {...pageMotion}>
+              <Checklists />
+            </motion.div>
+          )}
+
+          {tab === "Rotulometro" && (
+            <motion.div key="Rotulometro" {...pageMotion}>
+              <Rotulometro />
+            </motion.div>
+          )}
+
+          {tab === "Receitas" && (
+            <motion.div key="Receitas" {...pageMotion}>
+              <Recipes />
+            </motion.div>
+          )}
+
+          {tab === "Familia" && (
+            <motion.div key="Familia" {...pageMotion}>
+              <Family />
+            </motion.div>
+          )}
+
+          {tab === "Jogo" && (
+            <motion.div key="Jogo" {...pageMotion}>
+              <GameCheff />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <div className="mt-8 flex flex-wrap gap-2">
           <Btn
