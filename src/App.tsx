@@ -26,7 +26,11 @@ function Header({ title, onBack }: { title: string; onBack?: () => void }) {
   return (
     <div className="flex items-center gap-3 pb-4">
       {onBack ? (
-        <button onClick={onBack} className="p-2 rounded-xl hover:bg-gray-100">
+        <button
+          onClick={onBack}
+          className="p-2 rounded-xl hover:bg-gray-100"
+          aria-label="Voltar"
+        >
           <ArrowLeft />
         </button>
       ) : (
@@ -37,9 +41,8 @@ function Header({ title, onBack }: { title: string; onBack?: () => void }) {
   );
 }
 
-
 // --- RECEITAS ------------------------------------------------------------
-type Recipe = {
+export type Recipe = {
   id: string;
   title: string;
   time: string;
@@ -55,26 +58,65 @@ const RECIPES: Recipe[] = [
     title: "Panqueca Clássica sem Glúten",
     time: "20 min",
     difficulty: "Fácil",
-    ingredients: ["2 ovos", "1 xíc. farinha de arroz", "1/2 xíc. polvilho doce", "1 xíc. leite", "1 c.s. óleo", "sal"],
-    steps: ["Bata tudo até ficar homogêneo.", "Aqueça frigideira untada.", "Doure dos dois lados e sirva."],
-    swaps: ["Troque 1/2 xíc. farinha de arroz por 1/2 xíc. mistura pronta GF.", "Leite → bebida vegetal para versão sem lactose."],
+    ingredients: [
+      "2 ovos",
+      "1 xíc. farinha de arroz",
+      "1/2 xíc. polvilho doce",
+      "1 xíc. leite",
+      "1 c.s. óleo",
+      "sal",
+    ],
+    steps: [
+      "Bata tudo até ficar homogêneo.",
+      "Aqueça frigideira untada.",
+      "Doure dos dois lados e sirva.",
+    ],
+    swaps: [
+      "Troque 1/2 xíc. farinha de arroz por 1/2 xíc. mistura pronta GF.",
+      "Leite → bebida vegetal para versão sem lactose.",
+    ],
   },
   {
     id: "bolo-cenoura-gf",
     title: "Bolo de Cenoura GF",
     time: "45 min",
     difficulty: "Médio",
-    ingredients: ["3 cenouras", "3 ovos", "1/2 xíc. óleo", "1 1/2 xíc. mix farinha GF", "1 xíc. açúcar", "1 c.s. fermento"],
-    steps: ["Bata cenoura, ovos e óleo.", "Misture secos e incorpore.", "Asse a 180°C por ~35min."],
-    swaps: ["Use 70% farinha de arroz + 30% fécula de batata se não tiver mix."],
+    ingredients: [
+      "3 cenouras",
+      "3 ovos",
+      "1/2 xíc. óleo",
+      "1 1/2 xíc. mix farinha GF",
+      "1 xíc. açúcar",
+      "1 c.s. fermento",
+    ],
+    steps: [
+      "Bata cenoura, ovos e óleo.",
+      "Misture secos e incorpore.",
+      "Asse a 180°C por ~35min.",
+    ],
+    swaps: [
+      "Use 70% farinha de arroz + 30% fécula de batata se não tiver mix.",
+    ],
   },
   {
     id: "pao-forma-gf",
     title: "Pão de Forma GF Rápido",
     time: "60 min",
     difficulty: "Médio",
-    ingredients: ["2 xíc. mix GF", "2 ovos", "1 xíc. água morna", "1 c.s. açúcar", "1 c.s. fermento biológico", "1/4 xíc. óleo", "sal"],
-    steps: ["Ative fermento com água e açúcar.", "Misture tudo e bata.", "Descanso 30min e asse a 200°C por 30–35min."],
+    ingredients: [
+      "2 xíc. mix GF",
+      "2 ovos",
+      "1 xíc. água morna",
+      "1 c.s. açúcar",
+      "1 c.s. fermento biológico",
+      "1/4 xíc. óleo",
+      "sal",
+    ],
+    steps: [
+      "Ative fermento com água e açúcar.",
+      "Misture tudo e bata.",
+      "Descanso 30min e asse a 200°C por 30–35min.",
+    ],
     swaps: ["Acrescente 1 c.s. psyllium para melhor textura."],
   },
 ];
@@ -107,26 +149,36 @@ function Recipes() {
         <Card>
           <h4 className="font-semibold mb-2">Ingredientes</h4>
           <ul className="list-disc ml-5 space-y-1 text-sm">
-            {sel.ingredients.map((i, idx) => <li key={idx}>{i}</li>)}
+            {sel.ingredients.map((i, idx) => (
+              <li key={idx}>{i}</li>
+            ))}
           </ul>
         </Card>
         <Card>
           <h4 className="font-semibold mb-2">Passo a passo</h4>
           <ol className="list-decimal ml-5 space-y-1 text-sm">
-            {sel.steps.map((i, idx) => <li key={idx}>{i}</li>)}
+            {sel.steps.map((i, idx) => (
+              <li key={idx}>{i}</li>
+            ))}
           </ol>
         </Card>
       </div>
       <Card className="mt-4 bg-amber-50">
         <h4 className="font-semibold mb-2">Substituições</h4>
         <ul className="list-disc ml-5 space-y-1 text-sm">
-          {sel.swaps.map((i, idx) => <li key={idx}>{i}</li>)}
+          {sel.swaps.map((i, idx) => (
+            <li key={idx}>{i}</li>
+          ))}
         </ul>
       </Card>
       <div className="mt-4">
         <Btn
           onClick={() => {
-            console.log("save_recipe", { recipe_id: sel.id, alergênicos: ["glúten"], tempo_preparo: sel.time });
+            console.log("save_recipe", {
+              recipe_id: sel.id,
+              alergênicos: ["glúten"],
+              tempo_preparo: sel.time,
+            });
             alert("Receita salva! (simulação)");
           }}
         >
@@ -139,7 +191,9 @@ function Recipes() {
 
 // --- PERFIL FAMILIAR -----------------------------------------------------
 function Family() {
-  const [kids, setKids] = useState<{ name: string; age: number }[]>([{ name: "Ana", age: 8 }]);
+  const [kids, setKids] = useState<{ name: string; age: number }[]>([
+    { name: "Ana", age: 8 },
+  ]);
   const [newName, setNewName] = useState("");
   const [newAge, setNewAge] = useState("");
   const [showForm, setShowForm] = useState(false);
@@ -153,7 +207,9 @@ function Family() {
     setNewName("");
     setNewAge("");
     setShowForm(false);
-    console.log("family_profile_created", { idade_faixa: age < 6 ? "0-5" : age < 12 ? "6-11" : "12+" });
+    console.log("family_profile_created", {
+      idade_faixa: age < 6 ? "0-5" : age < 12 ? "6-11" : "12+",
+    });
   };
   return (
     <div>
@@ -174,16 +230,41 @@ function Family() {
       </div>
       {showForm ? (
         <Card className="mt-4 space-y-2">
-          <input className="w-full p-2 border rounded" placeholder="Nome" value={newName} onChange={(e) => setNewName(e.target.value)} />
-          <input className="w-full p-2 border rounded" placeholder="Idade" type="number" value={newAge} onChange={(e) => setNewAge(e.target.value)} />
+          <input
+            className="w-full p-2 border rounded"
+            placeholder="Nome"
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
+          />
+          <input
+            className="w-full p-2 border rounded"
+            placeholder="Idade"
+            type="number"
+            value={newAge}
+            onChange={(e) => setNewAge(e.target.value)}
+            min={1}
+          />
           <div className="flex gap-2">
-            <Btn onClick={save} disabled={!newName.trim() || !newAge}>Salvar</Btn>
-            <Btn variant="secondary" onClick={() => { setShowForm(false); setNewName(""); setNewAge(""); }}>Cancelar</Btn>
+            <Btn onClick={save} disabled={!newName.trim() || !newAge}>
+              Salvar
+            </Btn>
+            <Btn
+              variant="secondary"
+              onClick={() => {
+                setShowForm(false);
+                setNewName("");
+                setNewAge("");
+              }}
+            >
+              Cancelar
+            </Btn>
           </div>
         </Card>
       ) : (
         <div className="mt-4">
-          <Btn variant="secondary" onClick={() => setShowForm(true)}>Adicionar perfil</Btn>
+          <Btn variant="secondary" onClick={() => setShowForm(true)}>
+            Adicionar perfil
+          </Btn>
         </div>
       )}
     </div>
@@ -191,6 +272,7 @@ function Family() {
 }
 
 // --- APP PRINCIPAL -------------------------------------------------------
+
 type Tab = "Home" | "Checklists" | "Rotulometro" | "Receitas" | "Familia" | "Jogo";
 
 export default function App() {
@@ -200,7 +282,7 @@ export default function App() {
     animate: { opacity: 1, y: 0 },
     exit: { opacity: 0, y: -8 },
     transition: { duration: 0.2, ease: "easeOut" },
-  };
+  } as const;
 
   return (
     <AppLayout>
@@ -211,7 +293,9 @@ export default function App() {
           </div>
           <div>
             <h1 className="text-2xl md:text-3xl font-bold">CheckGluten</h1>
-            <p className="text-sm text-gray-600">MVP Educacional — confiança para famílias celíacas</p>
+            <p className="text-sm text-gray-600">
+              MVP Educacional — confiança para famílias celíacas
+            </p>
           </div>
         </div>
 
@@ -302,20 +386,65 @@ export default function App() {
         </AnimatePresence>
 
         <div className="mt-8 flex flex-wrap gap-2">
-          <Btn variant={tab === "Home" ? "primary" : "secondary"} onClick={() => setTab("Home")}>Home</Btn>
-          <Btn variant={tab === "Checklists" ? "primary" : "secondary"} onClick={() => setTab("Checklists")}>Checklists</Btn>
-          <Btn variant={tab === "Rotulometro" ? "primary" : "secondary"} onClick={() => setTab("Rotulometro")}>Rotulômetro</Btn>
-          <Btn variant={tab === "Receitas" ? "primary" : "secondary"} onClick={() => setTab("Receitas")}>Receitas</Btn>
-          <Btn variant={tab === "Familia" ? "primary" : "secondary"} onClick={() => setTab("Familia")}>Família</Btn>
-          <Btn variant={tab === "Jogo" ? "primary" : "secondary"} onClick={() => setTab("Jogo")}>Jogo</Btn>
+          <Btn
+            aria-current={tab === "Home"}
+            variant={tab === "Home" ? "primary" : "secondary"}
+            onClick={() => setTab("Home")}
+          >
+            Home
+          </Btn>
+          <Btn
+            aria-current={tab === "Checklists"}
+            variant={tab === "Checklists" ? "primary" : "secondary"}
+            onClick={() => setTab("Checklists")}
+          >
+            Checklists
+          </Btn>
+          <Btn
+            aria-current={tab === "Rotulometro"}
+            variant={tab === "Rotulometro" ? "primary" : "secondary"}
+            onClick={() => setTab("Rotulometro")}
+          >
+            Rotulômetro
+          </Btn>
+          <Btn
+            aria-current={tab === "Receitas"}
+            variant={tab === "Receitas" ? "primary" : "secondary"}
+            onClick={() => setTab("Receitas")}
+          >
+            Receitas
+          </Btn>
+          <Btn
+            aria-current={tab === "Familia"}
+            variant={tab === "Familia" ? "primary" : "secondary"}
+            onClick={() => setTab("Familia")}
+          >
+            Família
+          </Btn>
+          <Btn
+            aria-current={tab === "Jogo"}
+            variant={tab === "Jogo" ? "primary" : "secondary"}
+            onClick={() => setTab("Jogo")}
+          >
+            Jogo
+          </Btn>
         </div>
 
         <Card className="mt-6 bg-gray-50 text-xs text-gray-600">
           <div className="font-semibold mb-1">Notas para Demo</div>
           <ul className="list-disc ml-5 space-y-1">
-            <li>Mostre o fluxo: Home → Checklists (marcar 2 itens) → Rotulômetro (1 rodada) → Receitas (salvar).</li>
-            <li>Os eventos de telemetria são simulados via <code>console.log</code> (abra o DevTools).</li>
-            <li>Este protótipo é client-side e não armazena dados reais (compliance/LGPD).</li>
+            <li>
+              Mostre o fluxo: Home → Checklists (marcar 2 itens) → Rotulômetro (1
+              rodada) → Receitas (salvar).
+            </li>
+            <li>
+              Os eventos de telemetria são simulados via <code>console.log</code>
+              (abra o DevTools).
+            </li>
+            <li>
+              Este protótipo é client-side e não armazena dados reais
+              (compliance/LGPD).
+            </li>
           </ul>
         </Card>
       </div>
@@ -323,4 +452,5 @@ export default function App() {
   );
 }
 
+// Exports nomeados úteis para testes/storybook
 export { Recipes, Family };
