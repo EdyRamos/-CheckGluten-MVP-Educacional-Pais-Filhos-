@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Triângulo de alerta -->
+  <path d="M32 4L2 60h60L32 4z" fill="#fcd34d" stroke="#92400e" stroke-width="2"/>
+  <!-- Exclamação -->
+  <rect x="30" y="22" width="4" height="20" fill="#92400e"/>
+  <circle cx="32" cy="48" r="4" fill="#92400e"/>
+</svg>
