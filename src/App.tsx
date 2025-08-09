@@ -728,3 +728,5 @@ export default function App() {
     </div>
   );
 }
+
+export { Checklists, Rotulometro };
