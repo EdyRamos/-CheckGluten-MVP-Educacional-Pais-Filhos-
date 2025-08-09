@@ -1,0 +1,29 @@
+{
+  "files": {
+    "main.css": "/static/css/main.216ac56c.css",
+    "main.js": "/static/js/main.1da63800.js",
+    "static/js/675.eb869512.chunk.js": "/static/js/675.eb869512.chunk.js",
+    "static/js/291.84401d6a.chunk.js": "/static/js/291.84401d6a.chunk.js",
+    "static/js/537.ca8c3dc3.chunk.js": "/static/js/537.ca8c3dc3.chunk.js",
+    "static/js/275.58f5c733.chunk.js": "/static/js/275.58f5c733.chunk.js",
+    "static/js/166.3724e518.chunk.js": "/static/js/166.3724e518.chunk.js",
+    "static/media/page_bg.png": "/static/media/page_bg.f6166366cf26110aae32.png",
+    "static/media/life_full.png": "/static/media/life_full.760cb91f2e88f8d728d1.png",
+    "static/media/time.png": "/static/media/time.6dcd0a7f7d70c9f1b79c.png",
+    "static/media/life_empty.png": "/static/media/life_empty.b65e45451301d4306636.png",
+    "static/media/score.png": "/static/media/score.ebae2aa5b687e5d53aa6.png",
+    "static/media/pause.png": "/static/media/pause.2a9dc17c14bbb4b47ca6.png",
+    "static/media/card_tip_bg.png": "/static/media/card_tip_bg.c6f6cbeea3dce1ab003b.png",
+    "static/media/intro_bg.jpg": "/static/media/intro_bg.3adceb1370006d1b7de0.jpg",
+    "static/media/navbar.png": "/static/media/navbar.8e7ac565d072a341549a.png",
+    "static/media/mode_select_bg.jpg": "/static/media/mode_select_bg.8134573ccbdc5a5e471d.jpg",
+    "service-worker.js": "/service-worker.js",
+    "index.html": "/index.html",
+    "main.216ac56c.css.map": "/static/css/main.216ac56c.css.map",
+    "main.1da63800.js.map": "/static/js/main.1da63800.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.216ac56c.css",
+    "static/js/main.1da63800.js"
+  ]
+}
