@@ -7,25 +7,19 @@ import {
   GraduationCap,
   ListChecks,
   ArrowLeft,
-  Play,
   Users,
   Home,
-  Info,
   Star,
   Gamepad2,
 } from "lucide-react";
 import GameCheff from "./GameCheff";
 import Btn from "./components/Btn";
 import Card from "./components/Card";
-import Alert from "./components/Alert";
+import { Checklists } from "./components/Checklists";
+import { Rotulometro } from "./components/Rotulometro";
 
 // Ícones (mantém o alias '@' do Vite)
 import MascotIcon from "@/assets/icons/mascot.svg";
-import SearchIcon from "@/assets/icons/search.svg";
-import AlertIcon from "@/assets/icons/alert.svg";
-
-// Utilidade simples
-const cls = (...s: string[]) => s.filter(Boolean).join(" ");
 
 // Header local
 function Header({ title, onBack }: { title: string; onBack?: () => void }) {
@@ -43,252 +37,6 @@ function Header({ title, onBack }: { title: string; onBack?: () => void }) {
   );
 }
 
-// --- CHECKLISTS ----------------------------------------------------------
-const CHECKLISTS: Record<string, string[]> = {
-  "Cozinha Segura": [
-    "Separe utensílios exclusivos para sem glúten",
-    "Higienize bancadas antes de cozinhar",
-    "Guarde farinhas GF em potes fechados",
-    "Torradeira: use saco próprio ou capa",
-    "Leia rótulos mesmo dos produtos conhecidos",
-    "Explique regras para todos da casa",
-  ],
-  "Festa Infantil": [
-    "Converse com o anfitrião com antecedência",
-    "Leve alternativa segura (bolo/lanches)",
-    "Combine sinal para recusar alimentos",
-    "Oriente sobre contaminação cruzada",
-    "Identifique copos e pratos da criança",
-    "Tenha cartão de orientação para adultos",
-  ],
-  Escola: [
-    "Reunião com coordenação e professores",
-    "Plano de cuidado e contatos de emergência",
-    "Lancheira segura identificada",
-    "Orientar merendeiras e amigos",
-    "Área limpa para refeições",
-    "Treino de leitura do rótulo com a criança",
-  ],
-};
-
-type ChecklistKey = keyof typeof CHECKLISTS;
-
-export function Checklists() {
-  const [current, setCurrent] = useState<ChecklistKey | null>(null);
-  const [done, setDone] = useState<Record<string, boolean[]>>(
-    () =>
-      Object.fromEntries(
-        Object.keys(CHECKLISTS).map((k) => [
-          k,
-          Array(CHECKLISTS[k].length).fill(false),
-        ])
-      ) as Record<string, boolean[]>
-  );
-
-  const progress = (key: string) => {
-    const arr = done[key] || [];
-    const pct = Math.round((arr.filter(Boolean).length / arr.length) * 100);
-    return isNaN(pct) ? 0 : pct;
-  };
-
-  if (!current) {
-    return (
-      <div className="grid md:grid-cols-3 gap-4">
-        {Object.keys(CHECKLISTS).map((name) => (
-          <Card key={name} onClick={() => setCurrent(name as ChecklistKey)}>
-            <div className="flex items-start gap-3">
-              <img src={AlertIcon} alt="" className="w-5 h-5" />
-              <div className="flex-1">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-semibold">{name}</h3>
-                  <span className="text-xs text-gray-500">
-                    {progress(name)}% feito
-                  </span>
-                </div>
-                <p className="text-sm text-gray-600 mt-1">
-                  Checklist rápido, 2–3 min.
-                </p>
-              </div>
-            </div>
-          </Card>
-        ))}
-      </div>
-    );
-  }
-
-  const items = CHECKLISTS[current];
-  const toggle = (i: number) => {
-    const arr = [...done[current]];
-    arr[i] = !arr[i];
-    const next = { ...done, [current]: arr };
-    setDone(next);
-    console.log("checklist_complete", { contexto: current });
-  };
-
-  return (
-    <div>
-      <Header title={current} onBack={() => setCurrent(null)} />
-      <div className="space-y-2">
-        {items.map((t, i) => (
-          <label key={i} className="flex items-center gap-3 p-3 border rounded-xl">
-            <input
-              type="checkbox"
-              checked={done[current][i]}
-              onChange={() => toggle(i)}
-            />
-            <span>{t}</span>
-          </label>
-        ))}
-      </div>
-      <div className="mt-4 text-sm text-gray-600">Progresso: {progress(current)}%</div>
-    </div>
-  );
-}
-
-// --- MINI JOGO ROTULÔMETRO ----------------------------------------------
-type Round = {
-  ingredientes: string[];
-  perigosos: number[];
-  explicacoes: Record<string, string>;
-};
-
-const ROUNDS: Round[] = [
-  {
-    ingredientes: ["farinha de arroz", "açúcar", "malte de cevada", "goma xantana"],
-    perigosos: [2],
-    explicacoes: { "malte de cevada": "Derivado de cevada → contém glúten" },
-  },
-  {
-    ingredientes: ["amido de milho", "triticale", "cacau", "fermento químico"],
-    perigosos: [1],
-    explicacoes: { triticale: "Híbrido de trigo+centeio → contém glúten" },
-  },
-  {
-    ingredientes: ["polvilho doce", "aveia", "óleo vegetal", "sal"],
-    perigosos: [1],
-    explicacoes: {
-      aveia: "Pode conter traços conforme processamento. Verifique 'sem glúten'.",
-    },
-  },
-];
-
-export function Rotulometro() {
-  const [step, setStep] = useState<"idle" | "playing" | "result">("idle");
-  const [round, setRound] = useState(0);
-  const [picked, setPicked] = useState<number[]>([]);
-  const [acertos, setAcertos] = useState(0);
-  const [erros, setErros] = useState<string[]>([]);
-
-  const cur = ROUNDS[round];
-
-  const start = () => {
-    setStep("playing");
-    setRound(0);
-    setPicked([]);
-    setAcertos(0);
-    setErros([]);
-  };
-
-  const toggle = (i: number) => {
-    setPicked((p) => (p.includes(i) ? p.filter((x) => x !== i) : [...p, i]));
-  };
-
-  const submit = () => {
-    const corretos = cur.perigosos;
-    const ok = picked.sort().join(",") === corretos.sort().join(",");
-    if (ok) setAcertos((v) => v + 1);
-    else {
-      const errTerms = picked.filter((i) => !corretos.includes(i)).map((i) => cur.ingredientes[i]);
-      setErros((e) => [...e, ...errTerms]);
-    }
-    console.log("game_level_complete", {
-      level_id: round + 1,
-      acertos: ok ? 1 : 0,
-      erros: ok ? 0 : 1,
-      termos_errados: picked.filter((i) => !cur.perigosos.includes(i)).map((i) => cur.ingredientes[i]),
-    });
-    if (round + 1 < ROUNDS.length) {
-      setRound((r) => r + 1);
-      setPicked([]);
-    } else {
-      setStep("result");
-    }
-  };
-
-  if (step === "idle")
-    return (
-      <div className="text-center">
-        <p className="text-gray-600 mb-3 flex items-center justify-center gap-1">
-          <img src={SearchIcon} alt="Pesquisar" className="w-4 h-4" />
-          <span>Aprenda a identificar ingredientes de risco.</span>
-        </p>
-        <Btn onClick={start}>
-          <Play className="inline mr-2" /> Começar
-        </Btn>
-      </div>
-    );
-
-  if (step === "result") {
-    const total = ROUNDS.length;
-    const score = Math.round((acertos / total) * 100);
-    return (
-      <div className="space-y-4">
-        <Header title="Resultado" />
-        <Card>
-          <div className="text-2xl font-bold">{score}%</div>
-          <div className="text-gray-600">Acertos: {acertos} / {total}</div>
-          {erros.length > 0 && (
-            <Alert variant="danger" className="mt-2">
-              Termos para revisar: {Array.from(new Set(erros)).join(", ")}
-            </Alert>
-          )}
-        </Card>
-        <Btn variant="secondary" onClick={() => setStep("idle")}>
-          Jogar novamente
-        </Btn>
-      </div>
-    );
-  }
-
-  return (
-    <div>
-      <Header title={`Fase ${round + 1} de ${ROUNDS.length}`} />
-      <p className="text-sm text-gray-700 mb-2">
-        Toque nos ingredientes que indicam risco de glúten.
-      </p>
-      <div className="grid sm:grid-cols-2 gap-2">
-        {cur.ingredientes.map((ing, i) => (
-          <button
-            key={i}
-            onClick={() => toggle(i)}
-            className={cls(
-              "p-3 rounded-xl border text-left",
-              picked.includes(i) ? "bg-yellow-100 border-yellow-400" : "bg-white"
-            )}
-          >
-            {ing}
-          </button>
-        ))}
-      </div>
-      <div className="mt-4 flex items-center gap-2">
-        <Btn variant="secondary" onClick={submit}>
-          Confirmar escolha
-        </Btn>
-        <div className="text-sm text-gray-600 flex items-center gap-1">
-          <Info size={16} />
-          Dica: procure trigo, centeio, cevada, malte, triticale…
-        </div>
-      </div>
-      <Card className="mt-4 bg-blue-50 border-blue-200 text-sm">
-        {Object.entries(cur.explicacoes).map(([k, v]) => (
-          <div key={k}>
-            <strong>{k}:</strong> {v}
-          </div>
-        ))}
-      </Card>
-    </div>
-  );
-}
 
 // --- RECEITAS ------------------------------------------------------------
 type Recipe = {
@@ -575,4 +323,4 @@ export default function App() {
   );
 }
 
-export { Checklists, Rotulometro, Recipes, Family };
+export { Recipes, Family };
