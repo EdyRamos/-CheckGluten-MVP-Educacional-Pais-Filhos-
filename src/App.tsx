@@ -1,4 +1,6 @@
+// src/App.tsx
 import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import AppLayout from "./components/AppLayout";
 import {
   ChefHat,
@@ -168,7 +170,7 @@ const ROUNDS: Round[] = [
       aveia: "Pode conter traços conforme processamento. Verifique 'sem glúten'.",
     },
   },
-};
+];
 
 export function Rotulometro() {
   const [step, setStep] = useState<"idle" | "playing" | "result">("idle");
@@ -445,6 +447,12 @@ type Tab = "Home" | "Checklists" | "Rotulometro" | "Receitas" | "Familia" | "Jog
 
 export default function App() {
   const [tab, setTab] = useState<Tab>("Home");
+  const pageMotion = {
+    initial: { opacity: 0, y: 8 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -8 },
+    transition: { duration: 0.2, ease: "easeOut" },
+  };
 
   return (
     <AppLayout>
@@ -459,55 +467,91 @@ export default function App() {
           </div>
         </div>
 
-        {tab === "Home" && (
-          <div className="grid md:grid-cols-3 gap-4">
-            <Card onClick={() => setTab("Checklists")}>
-              <div className="flex items-start gap-3">
-                <ListChecks className="text-green-600" />
-                <div>
-                  <div className="font-semibold">Checklists Rápidos</div>
-                  <div className="text-sm text-gray-600">Cozinha, Festa e Escola — 2–3 min cada</div>
-                </div>
-              </div>
-            </Card>
+        <AnimatePresence mode="wait">
+          {tab === "Home" && (
+            <motion.div key="Home" {...pageMotion}>
+              <div className="grid md:grid-cols-3 gap-4">
+                <Card onClick={() => setTab("Checklists")}>
+                  <div className="flex items-start gap-3">
+                    <ListChecks className="text-green-600" />
+                    <div>
+                      <div className="font-semibold">Checklists Rápidos</div>
+                      <div className="text-sm text-gray-600">
+                        Cozinha, Festa e Escola — 2–3 min cada
+                      </div>
+                    </div>
+                  </div>
+                </Card>
 
-            <Card onClick={() => setTab("Rotulometro")}>
-              <div className="flex items-start gap-3">
-                <GraduationCap className="text-indigo-600" />
-                <div>
-                  <div className="font-semibold">Minigame Rotulômetro</div>
-                  <div className="text-sm text-gray-600">Aprenda a detectar termos de risco</div>
-                </div>
-              </div>
-            </Card>
+                <Card onClick={() => setTab("Rotulometro")}>
+                  <div className="flex items-start gap-3">
+                    <GraduationCap className="text-indigo-600" />
+                    <div>
+                      <div className="font-semibold">Minigame Rotulômetro</div>
+                      <div className="text-sm text-gray-600">
+                        Aprenda a detectar termos de risco
+                      </div>
+                    </div>
+                  </div>
+                </Card>
 
-            <Card onClick={() => setTab("Receitas")}>
-              <div className="flex items-start gap-3">
-                <ChefHat className="text-orange-600" />
-                <div>
-                  <div className="font-semibold">Receitas-Base</div>
-                  <div className="text-sm text-gray-600">Substituições seguras e práticas</div>
-                </div>
-              </div>
-            </Card>
+                <Card onClick={() => setTab("Receitas")}>
+                  <div className="flex items-start gap-3">
+                    <ChefHat className="text-orange-600" />
+                    <div>
+                      <div className="font-semibold">Receitas-Base</div>
+                      <div className="text-sm text-gray-600">
+                        Substituições seguras e práticas
+                      </div>
+                    </div>
+                  </div>
+                </Card>
 
-            <Card onClick={() => setTab("Jogo")}>
-              <div className="flex items-start gap-3">
-                <Gamepad2 className="text-pink-600" />
-                <div>
-                  <div className="font-semibold">Jogo — CheckGluten</div>
-                  <div className="text-sm text-gray-600">Aventura educativa (Phaser)</div>
-                </div>
+                <Card onClick={() => setTab("Jogo")}>
+                  <div className="flex items-start gap-3">
+                    <Gamepad2 className="text-pink-600" />
+                    <div>
+                      <div className="font-semibold">Jogo — CheckGluten</div>
+                      <div className="text-sm text-gray-600">
+                        Aventura educativa (Phaser)
+                      </div>
+                    </div>
+                  </div>
+                </Card>
               </div>
-            </Card>
-          </div>
-        )}
+            </motion.div>
+          )}
 
-        {tab === "Checklists" && <Checklists />}
-        {tab === "Rotulometro" && <Rotulometro />}
-        {tab === "Receitas" && <Recipes />}
-        {tab === "Familia" && <Family />}
-        {tab === "Jogo" && <GameCheff />}
+          {tab === "Checklists" && (
+            <motion.div key="Checklists" {...pageMotion}>
+              <Checklists />
+            </motion.div>
+          )}
+
+          {tab === "Rotulometro" && (
+            <motion.div key="Rotulometro" {...pageMotion}>
+              <Rotulometro />
+            </motion.div>
+          )}
+
+          {tab === "Receitas" && (
+            <motion.div key="Receitas" {...pageMotion}>
+              <Recipes />
+            </motion.div>
+          )}
+
+          {tab === "Familia" && (
+            <motion.div key="Familia" {...pageMotion}>
+              <Family />
+            </motion.div>
+          )}
+
+          {tab === "Jogo" && (
+            <motion.div key="Jogo" {...pageMotion}>
+              <GameCheff />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <div className="mt-8 flex flex-wrap gap-2">
           <Btn variant={tab === "Home" ? "primary" : "secondary"} onClick={() => setTab("Home")}>Home</Btn>
