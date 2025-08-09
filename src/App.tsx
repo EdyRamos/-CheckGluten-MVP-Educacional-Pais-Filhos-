@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import AppLayout from "./components/AppLayout";
 import {
   ChefHat,
   GraduationCap,
@@ -124,7 +125,7 @@ const CHECKLISTS: Record<string, string[]> = {
 
 type ChecklistKey = keyof typeof CHECKLISTS;
 
-function Checklists() {
+export function Checklists() {
   const [current, setCurrent] = useState<ChecklistKey | null>(null);
   const [done, setDone] = useState<Record<string, boolean[]>>(
     () =>
@@ -191,12 +192,12 @@ function Checklists() {
           </label>
         ))}
       </div>
-      <div className="mt-4 text-sm text-gray-600">
-        Progresso: {progress(current)}%
+        <div className="mt-4 text-sm text-gray-600">
+          Progresso: {progress(current)}%
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
 // --- MINI JOGO ROTULÔMETRO ----------------------------------------------
 type Round = {
@@ -226,7 +227,7 @@ const ROUNDS: Round[] = [
   },
 ];
 
-function Rotulometro() {
+export function Rotulometro() {
   const [step, setStep] = useState<"idle" | "playing" | "result">("idle");
   const [round, setRound] = useState(0);
   const [picked, setPicked] = useState<number[]>([]);
@@ -345,11 +346,11 @@ function Rotulometro() {
           <div key={k}>
             <strong>{k}:</strong> {v}
           </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
 // --- RECEITAS ------------------------------------------------------------
 type Recipe = {
@@ -493,11 +494,11 @@ function Recipes() {
           }}
         >
           Salvar & gerar lista (simulação)
-        </Btn>
+          </Btn>
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
 // --- PERFIL FAMILIAR -----------------------------------------------------
 function Family() {
@@ -596,20 +597,8 @@ export default function App() {
   const [tab, setTab] = useState<Tab>("Home");
 
   return (
-    <div className="min-h-[100vh] bg-gradient-to-b from-slate-50 to-white">
+    <AppLayout>
       <div className="max-w-4xl mx-auto p-4 md:p-6">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 rounded-xl bg-blue-600 text-white">
-            <GraduationCap />
-          </div>
-          <div>
-            <h1 className="text-2xl md:text-3xl font-bold">CheckGluten</h1>
-            <p className="text-sm text-gray-600">
-              MVP Educacional — confiança para famílias celíacas
-            </p>
-          </div>
-        </div>
-
         {tab === "Home" && (
           <div className="grid md:grid-cols-3 gap-4">
             <Card onClick={() => setTab("Checklists")}>
@@ -666,7 +655,7 @@ export default function App() {
         {tab === "Rotulometro" && <Rotulometro />}
         {tab === "Receitas" && <Recipes />}
         {tab === "Familia" && <Family />}
-        {tab === "Jogo" && <GameCheff />}
+        {tab === "Jogo" && <GameCheff embedded />}
 
         <div className="mt-8 flex flex-wrap gap-2">
           <Btn
@@ -725,6 +714,6 @@ export default function App() {
           </ul>
         </div>
       </div>
-    </div>
+    </AppLayout>
   );
 }

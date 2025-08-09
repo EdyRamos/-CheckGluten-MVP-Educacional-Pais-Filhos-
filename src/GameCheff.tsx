@@ -1,9 +1,14 @@
-import React from 'react';
+import React from "react";
+import AppLayout from "./components/AppLayout";
 
-export default function GameCheff() {
+interface GameCheffProps {
+  embedded?: boolean;
+}
+
+export default function GameCheff({ embedded = false }: GameCheffProps) {
   // A build do jogo (CRA) deve ser copiada para /public/games/cheff
   // via script: npm run game:copy
-  return (
+  const content = (
     <div className="h-[75vh] border rounded-2xl overflow-hidden bg-black">
       <iframe
         title="Chef Alerg - Jogo"
@@ -13,4 +18,6 @@ export default function GameCheff() {
       />
     </div>
   );
+
+  return embedded ? content : <AppLayout>{content}</AppLayout>;
 }
