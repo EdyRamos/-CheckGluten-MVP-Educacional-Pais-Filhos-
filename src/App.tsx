@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import AppLayout from "./components/AppLayout";
 import {
   ChefHat,
   GraduationCap,
@@ -13,6 +14,8 @@ import {
   Gamepad2,
 } from "lucide-react";
 import GameCheff from "./GameCheff";
+
+// Ajuste estes imports se o alias "@" não estiver configurado no tsconfig.json
 import MascotIcon from "@/assets/icons/mascot.svg";
 import SearchIcon from "@/assets/icons/search.svg";
 import AlertIcon from "@/assets/icons/alert.svg";
@@ -36,8 +39,7 @@ function Btn({
   const styles = {
     primary:
       "bg-blue-600 text-white hover:bg-blue-700 border-blue-600 disabled:opacity-50",
-    ghost:
-      "bg-transparent hover:bg-gray-100 border-transparent text-gray-800",
+    ghost: "bg-transparent hover:bg-gray-100 border-transparent text-gray-800",
     outline: "bg-white border-gray-300 hover:bg-gray-50",
   } as const;
   return (
@@ -127,7 +129,7 @@ const CHECKLISTS: Record<string, string[]> = {
 
 type ChecklistKey = keyof typeof CHECKLISTS;
 
-function Checklists() {
+export function Checklists() {
   const [current, setCurrent] = useState<ChecklistKey | null>(null);
   const [done, setDone] = useState<Record<string, boolean[]>>(
     () =>
@@ -143,7 +145,7 @@ function Checklists() {
     const arr = done[key] || [];
     const pct = Math.round((arr.filter(Boolean).length / arr.length) * 100);
     return isNaN(pct) ? 0 : pct;
-    };
+  };
 
   if (!current) {
     return (
@@ -229,7 +231,7 @@ const ROUNDS: Round[] = [
   },
 ];
 
-function Rotulometro() {
+export function Rotulometro() {
   const [step, setStep] = useState<"idle" | "playing" | "result">("idle");
   const [round, setRound] = useState(0);
   const [picked, setPicked] = useState<number[]>([]);
@@ -600,7 +602,7 @@ export default function App() {
   const [tab, setTab] = useState<Tab>("Home");
 
   return (
-    <div className="min-h-[100vh] bg-gradient-to-b from-slate-50 to-white">
+    <AppLayout>
       <div className="max-w-4xl mx-auto p-4 md:p-6">
         <div className="flex items-center gap-3 mb-6">
           <div className="p-2 rounded-xl bg-blue-600">
@@ -729,7 +731,7 @@ export default function App() {
           </ul>
         </div>
       </div>
-    </div>
+    </AppLayout>
   );
 }
 
