@@ -15,6 +15,11 @@ import {
 } from "lucide-react";
 import GameCheff from "./GameCheff";
 
+// Ajuste estes imports se o alias "@" não estiver configurado no tsconfig.json
+import MascotIcon from "@/assets/icons/mascot.svg";
+import SearchIcon from "@/assets/icons/search.svg";
+import AlertIcon from "@/assets/icons/alert.svg";
+
 // Utilidades simples
 const cls = (...s: string[]) => s.filter(Boolean).join(" ");
 
@@ -34,8 +39,7 @@ function Btn({
   const styles = {
     primary:
       "bg-blue-600 text-white hover:bg-blue-700 border-blue-600 disabled:opacity-50",
-    ghost:
-      "bg-transparent hover:bg-gray-100 border-transparent text-gray-800",
+    ghost: "bg-transparent hover:bg-gray-100 border-transparent text-gray-800",
     outline: "bg-white border-gray-300 hover:bg-gray-50",
   } as const;
   return (
@@ -141,7 +145,7 @@ export function Checklists() {
     const arr = done[key] || [];
     const pct = Math.round((arr.filter(Boolean).length / arr.length) * 100);
     return isNaN(pct) ? 0 : pct;
-    };
+  };
 
   if (!current) {
     return (
@@ -149,7 +153,7 @@ export function Checklists() {
         {Object.keys(CHECKLISTS).map((name) => (
           <Card key={name} onClick={() => setCurrent(name as ChecklistKey)}>
             <div className="flex items-start gap-3">
-              <ListChecks className="text-green-600" />
+              <img src={AlertIcon} alt="" className="w-5 h-5" />
               <div className="flex-1">
                 <div className="flex items-center justify-between">
                   <h3 className="font-semibold">{name}</h3>
@@ -192,12 +196,12 @@ export function Checklists() {
           </label>
         ))}
       </div>
-        <div className="mt-4 text-sm text-gray-600">
-          Progresso: {progress(current)}%
-        </div>
+      <div className="mt-4 text-sm text-gray-600">
+        Progresso: {progress(current)}%
       </div>
-    );
-  }
+    </div>
+  );
+}
 
 // --- MINI JOGO ROTULÔMETRO ----------------------------------------------
 type Round = {
@@ -277,8 +281,9 @@ export function Rotulometro() {
   if (step === "idle")
     return (
       <div className="text-center">
-        <p className="text-gray-600 mb-3">
-          Aprenda a identificar ingredientes de risco.
+        <p className="text-gray-600 mb-3 flex items-center justify-center gap-1">
+          <img src={SearchIcon} alt="Pesquisar" className="w-4 h-4" />
+          <span>Aprenda a identificar ingredientes de risco.</span>
         </p>
         <Btn onClick={start}>
           <Play className="inline mr-2" /> Começar
@@ -346,11 +351,11 @@ export function Rotulometro() {
           <div key={k}>
             <strong>{k}:</strong> {v}
           </div>
-          ))}
-        </div>
+        ))}
       </div>
-    );
-  }
+    </div>
+  );
+}
 
 // --- RECEITAS ------------------------------------------------------------
 type Recipe = {
@@ -494,11 +499,11 @@ function Recipes() {
           }}
         >
           Salvar & gerar lista (simulação)
-          </Btn>
-        </div>
+        </Btn>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
 // --- PERFIL FAMILIAR -----------------------------------------------------
 function Family() {
@@ -599,6 +604,18 @@ export default function App() {
   return (
     <AppLayout>
       <div className="max-w-4xl mx-auto p-4 md:p-6">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="p-2 rounded-xl bg-blue-600">
+            <img src={MascotIcon} alt="Mascote" className="w-6 h-6" />
+          </div>
+          <div>
+            <h1 className="text-2xl md:text-3xl font-bold">CheckGluten</h1>
+            <p className="text-sm text-gray-600">
+              MVP Educacional — confiança para famílias celíacas
+            </p>
+          </div>
+        </div>
+
         {tab === "Home" && (
           <div className="grid md:grid-cols-3 gap-4">
             <Card onClick={() => setTab("Checklists")}>
@@ -655,7 +672,7 @@ export default function App() {
         {tab === "Rotulometro" && <Rotulometro />}
         {tab === "Receitas" && <Recipes />}
         {tab === "Familia" && <Family />}
-        {tab === "Jogo" && <GameCheff embedded />}
+        {tab === "Jogo" && <GameCheff />}
 
         <div className="mt-8 flex flex-wrap gap-2">
           <Btn
@@ -717,3 +734,5 @@ export default function App() {
     </AppLayout>
   );
 }
+
+export { Checklists, Rotulometro };
