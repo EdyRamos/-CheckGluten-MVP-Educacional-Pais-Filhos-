@@ -1,19 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&family=Inter:wght@400;700&family=Nunito:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Ocupa a tela toda */
 html, body, #root { height: 100%; }
 
-body {
-  font-family: 'Inter', sans-serif;
-}
+/* Tipografia base via Tailwind */
+@layer base {
+  body {
+    @apply font-body;
+  }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-.logo {
-  font-family: 'Baloo 2', cursive;
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
+
+  /* Caso você use uma classe para a marca/logotipo */
+  .logo {
+    @apply font-heading;
+  }
 }
