@@ -74,7 +74,7 @@ const CHECKLISTS: Record<string, string[]> = {
   ],
 };
 
-function Checklists() {
+export function Checklists() {
   const [current, setCurrent] = useState<keyof typeof CHECKLISTS | null>(null);
   const [done, setDone] = useState<Record<string, boolean[]>>(() => Object.fromEntries(Object.keys(CHECKLISTS).map(k => [k, Array(CHECKLISTS[k].length).fill(false)])) as Record<string, boolean[]>);
 
@@ -152,7 +152,7 @@ const ROUNDS: Round[] = [
   },
 ];
 
-function Rotulometro() {
+export function Rotulometro() {
   const [step, setStep] = useState<"idle" | "playing" | "result">("idle");
   const [round, setRound] = useState(0);
   const [picked, setPicked] = useState<number[]>([]);

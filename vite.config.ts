@@ -5,4 +5,7 @@ export default defineConfig({
   plugins: [react()],
   // Para GitHub Pages web use base: '/chef-alerg-mvp/'
   base: '/',
+  test: {
+    environment: 'jsdom',
+  },
 })

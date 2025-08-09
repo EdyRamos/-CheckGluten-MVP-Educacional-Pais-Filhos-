@@ -53,3 +53,10 @@ yarn dev
 # com pnpm
 pnpm i
 pnpm dev
+```
+
+## Testes
+
+```bash
+npm test
+```
