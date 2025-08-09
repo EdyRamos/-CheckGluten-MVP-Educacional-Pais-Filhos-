@@ -3,6 +3,9 @@ export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
     extend: {
+      backgroundImage: {
+        'app-gradient': 'linear-gradient(to bottom, #4F9DDE, #FFFFFF)',
+      },
       colors: {
         primary: '#4F9DDE',
         secondary: '#FFD166',
@@ -21,4 +24,3 @@ export default {
   },
   plugins: [],
 }
-

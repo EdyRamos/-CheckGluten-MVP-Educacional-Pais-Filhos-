@@ -734,5 +734,4 @@ export default function App() {
     </AppLayout>
   );
 }
-
 export { Checklists, Rotulometro, Recipes, Family };
