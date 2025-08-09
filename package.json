@@ -11,7 +11,8 @@
     "cap:add:android": "npx cap add android",
     "cap:copy": "npx cap copy",
     "cap:open:android": "npx cap open android",
-    "apk:debug": "npm run build && npx cap copy && cd android && ./gradlew assembleDebug"
+    "apk:debug": "npm run build && npx cap copy && cd android && ./gradlew assembleDebug",
+    "game:copy": "node scripts/copy-game.mjs"
   },
   "dependencies": {
     "react": "^18.2.0",

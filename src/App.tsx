@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle, ChefHat, GraduationCap, ListChecks, BookOpen, ArrowLeft, Play, Users, Home, Info, Star } from "lucide-react";
+import { CheckCircle, ChefHat, GraduationCap, ListChecks, BookOpen, ArrowLeft, Play, Users, Home, Info, Star, Gamepad2 } from "lucide-react";
+import GameCheff from "./GameCheff";
 
 // Utilidades simples
 const cls = (...s: string[]) => s.filter(Boolean).join(" ");
@@ -373,7 +374,7 @@ function Family() {
 
 // --- APP PRINCIPAL -------------------------------------------------------
 
-type Tab = "Home" | "Checklists" | "Rotulometro" | "Receitas" | "Familia";
+type Tab = "Home" | "Checklists" | "Rotulometro" | "Receitas" | "Familia" | "Jogo";
 
 export default function App() {
   const [tab, setTab] = useState<Tab>("Home");
@@ -418,6 +419,15 @@ export default function App() {
                 </div>
               </div>
             </Card>
+<Card onClick={() => setTab("Jogo")}>
+  <div className="flex items-start gap-3">
+    <Gamepad2 className="text-pink-600" />
+    <div>
+      <div className="font-semibold">Jogo — Chef Alerg</div>
+      <div className="text-sm text-gray-600">Aventura educativa (Phaser)</div>
+    </div>
+  </div>
+</Card>
           </div>
         )}
 
@@ -425,6 +435,7 @@ export default function App() {
         {tab === "Rotulometro" && <Rotulometro />}
         {tab === "Receitas" && <Recipes />}
         {tab === "Familia" && <Family />}
+        {tab === "Jogo" && <GameCheff />}
 
         <div className="mt-8 flex flex-wrap gap-2">
           <Btn variant={tab === "Home" ? "primary" : "outline"} onClick={() => setTab("Home")}>Home</Btn>
