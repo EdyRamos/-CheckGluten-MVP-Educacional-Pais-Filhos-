@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import GameCheff from "./GameCheff";
 
-// Ajuste estes imports se o alias "@" não estiver configurado no tsconfig.json
+// Ícones (ajuste o alias "@" se necessário)
 import MascotIcon from "@/assets/icons/mascot.svg";
 import SearchIcon from "@/assets/icons/search.svg";
 import AlertIcon from "@/assets/icons/alert.svg";
@@ -735,4 +735,4 @@ export default function App() {
   );
 }
 
-export { Checklists, Rotulometro };
+export { Checklists, Rotulometro, Recipes, Family };
