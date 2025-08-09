@@ -23,8 +23,23 @@ function Btn({ children, onClick, variant = "primary", disabled = false }: { chi
 
 // Cartão
 function Card({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (!onClick) return;
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      onClick();
+    }
+  };
+
   return (
-    <motion.div whileHover={{ y: -2 }} className="p-5 rounded-2xl border bg-white shadow-sm hover:shadow-md cursor-pointer" onClick={onClick}>
+    <motion.div
+      whileHover={{ y: -2 }}
+      className="p-5 rounded-2xl border bg-white shadow-sm hover:shadow-md cursor-pointer focus:outline-none"
+      onClick={onClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+    >
       {children}
     </motion.div>
   );
