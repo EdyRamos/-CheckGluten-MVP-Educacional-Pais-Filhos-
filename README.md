@@ -18,7 +18,7 @@ Este MVP foca em **educação prática e engajamento**:
 ---
 
 ## Demo
-- **GitHub Pages:** https://SEU_USUARIO.github.io/chef-alerg-mvp/  
+- **GitHub Pages:**https://github.com/EdyRamos/-CheckGluten-MVP-Educacional-Pais-Filhos  
   > Se a página 404, aguarde a primeira execução do workflow de deploy.
 
 ---
